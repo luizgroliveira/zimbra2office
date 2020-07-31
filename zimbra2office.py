@@ -1,4 +1,5 @@
 from __future__ import print_function
+import glob
 import os
 import pandas as pd
 import sys
@@ -26,16 +27,25 @@ if not os.path.isdir(csv_output):
     print("Diretorio de destino dos arquivos csv nao existe: {}".format(csv_output))
     sys.exit(1)
     
-df = pd.read_csv("/tmp/eber.cherulli@funpresp.com.br.csv", na_filter=False)
 
-# pd.set_option('display.max_columns', None)
-# pd.set_option('display.max_rows', None)
+def convertFile(file):
+    if os.path.isfile(file):
+        filename = os.path.basename(file)
+        print("Convertendo o arquivo: {}".format(filename))
+    import ipdb
+    #ipdb.set_trace()
+    df = pd.read_csv(file, na_filter=False)
 
-#columns = ["email", "fileAs", "firstName", "fullName", "lastName", "middleName"] 
-columns = ["firstName","middleName","lastName","company","jobTitle","workPhone","workPhone2","companyPhone","homePhone","homePhone2","mobilePhone","email","email2"]
+    # pd.set_option('display.max_columns', None)
+    # pd.set_option('display.max_rows', None)
 
-office = df[columns]
+    columns = ["firstName","middleName","lastName","company","jobTitle","workPhone","workPhone2","companyPhone","homePhone","homePhone2","mobilePhone","email","email2"]
 
-office.to_csv("/tmp/csv/eber.cherulli@funpresp.com.br.csv", index=None)
+    office = df[columns]
 
+    office.to_csv(os.path.join(csv_output,filename), index=None)
+    print("Arquivo convertido com sucesso: {}".format(os.path.join(csv_output,filename)))
 
+os.chdir(csv_input)
+for file in glob.glob(os.path.join(csv_input,"*.csv")):
+    convertFile(file)
