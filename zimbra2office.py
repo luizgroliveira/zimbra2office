@@ -41,6 +41,8 @@ def convertFile(file):
 
     columns = ["firstName","middleName","lastName","company","jobTitle","workPhone","workPhone2","companyPhone","homePhone","homePhone2","mobilePhone","email","email2"]
 
+    df = df.reindex(columns=columns)
+
     office = df[columns]
 
     office.to_csv(os.path.join(csv_output,filename), index=None)
